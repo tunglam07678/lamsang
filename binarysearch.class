@@ -1,0 +1,73 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import java.util.Scanner;
+
+public class BinarySearch {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        System.out.println("Enter number of array:");
+        int length = scanner.nextInt();
+        scanner.nextLine();
+        
+        // Tạo mảng và in ra dãy số ngẫu nhiên
+        int[] array = new int[length];
+        System.out.print("Random array: ");
+        for (int i = 0; i < length; i++) {
+            array[i] = new Random().nextInt(length);
+            System.out.print(array[i] + " ");
+        }
+        
+        System.out.println("\nEnter search value:");
+        int search = scanner.nextInt();
+
+        // Sắp xếp mảng
+        Arrays.sort(array);
+        System.out.print("\nSorted array: ");
+        displayArray(array);
+
+        // Tìm kiếm và đếm số lần xuất hiện của giá trị
+        List<Integer> foundIndices = new ArrayList<>();
+        binarySearch(array, search, 0, length - 1, foundIndices);
+        
+        if (foundIndices.size() > 0) {
+            // Sắp xếp lại danh sách các chỉ số
+            Collections.sort(foundIndices);
+            System.out.println("\nFound " + search + " at indices: " + foundIndices);
+            System.out.println("Number of occurrences: " + foundIndices.size());
+        } else {
+            System.out.println("\nKhông tìm thấy giá trị " + search + " trong mảng.");
+        }
+    }
+
+    public static void displayArray(int[] arr) {
+        System.out.print("[");
+        for (int i = 0; i < arr.length; i++) {
+            System.out.print(arr[i]);
+            if (i < arr.length - 1) {
+                System.out.print(", ");
+            }
+        }
+        System.out.print("]");
+    }
+
+    public static void binarySearch(int[] array, int value, int left, int right, List<Integer> indices) {
+        if (left > right) {
+            return;
+        }
+        int middle = (left + right) / 2;
+        if (array[middle] == value) {
+            indices.add(middle);
+            binarySearch(array, value, left, middle - 1, indices);
+            binarySearch(array, value, middle + 1, right, indices);
+        } else if (array[middle] > value) {
+            binarySearch(array, value, left, middle - 1, indices);
+        } else {
+            binarySearch(array, value, middle + 1, right, indices);
+        }
+    }
+}
